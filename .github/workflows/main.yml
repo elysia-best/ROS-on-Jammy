@@ -1,0 +1,68 @@
+name: Build on Ubuntu 22.04
+
+permissions: write-all
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  debian:
+    name: Debian
+    runs-on: uubuntu-22.04
+    steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 4096
+        swap-size-mb: 512
+        remove-dotnet: 'true'
+        emove-android: 'true'
+          
+    - name: Checkout Source
+      uses: actions/checkout@v4
+      
+    - name: Add repository
+      run: |
+        sudo curl -L -o /etc/apt/trusted.gpg.d/ros1-on-ubuntu.gpg.asc https://sourceforge.net/projects/ros-for-ubuntu/files/repo/ROSMirror/public-file.key
+        sudo bash -c "echo 'deb https://sourceforge.net/projects/ros-for-ubuntu/files/repo/ROSMirror jammy main' >> /etc/apt/sources.list.d/ros1-on-ubuntu.list"
+        sudo apt update -y
+      
+    - name: Install the basic dev packages
+      run: apt-get install -y equivs curl git devscripts lintian build-essential automake autotools-dev cmake g++ python3-pip
+
+    - name: Install ROS dev packages
+      run: |
+        sudo pip3 install -U rosdep rosinstall_generator vcstool
+    - name: Prepare rosdep
+      run: |
+        sudo mkdir -p /etc/ros/rosdep/sources.list.d/
+        sudo curl -o /etc/ros/rosdep/sources.list.d/20-default.list https://gitee.com/qinyinan/rosdistro/raw/master/rosdep/sources.list.d/20-default.list
+        export ROSDISTRO_INDEX_URL=https://gitee.com/qinyinan/rosdistro/raw/master/index-v4.yaml
+        rosdep update
+        sudo rosdep update
+        
+    - name: Get ROS Source
+      run: |
+        mkdir -p src
+        vcs import --input noetic-desktop.rosinstall ./src
+
+    - name: Build Package
+      run: |
+        dpkg-buildpackage -b -uc -us 
+        
+    - name: Prepare Artifacts
+      run: |
+        mkdir -p artifacts
+        mv ../*.deb artifacts
+
+    - name: Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ROS1 noetic Auto Build
+        path: ${{ github.workspace }}/artifacts/*
+        compression-level: 9 # maximum compression
+        if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
