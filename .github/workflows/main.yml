@@ -37,6 +37,7 @@ jobs:
     - name: Install ROS dev packages
       run: |
         sudo pip3 install -U rosdep rosinstall_generator vcstool
+        
     - name: Prepare rosdep
       run: |
         sudo mkdir -p /etc/ros/rosdep/sources.list.d/
@@ -49,6 +50,9 @@ jobs:
       run: |
         mkdir -p src
         vcs import --input noetic-desktop.rosinstall ./src
+
+    - name: Install Build Deps
+      run: rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro noetic -y
 
     - name: Build Package
       run: |
