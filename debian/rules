@@ -37,3 +37,6 @@ override_dh_auto_install:
 
 override_dh_builddeb:
 	dh_builddeb -- -Zgzip -z9 --uniform-compression
+
+override_dh_shlibdeps:
+	dh_shlibdeps -- -l$(CURDIR)/debian/ros-noetic-desktop-full/opt/ros/noetic/lib -l$(CURDIR)/debian/ros-noetic-desktop-full/opt/ros/noetic/bin 
