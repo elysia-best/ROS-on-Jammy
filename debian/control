@@ -1,0 +1,19 @@
+Source: ros
+Section: devel
+Priority: optional
+Maintainer: Elysia <c.elysia@foxmail.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ python3-pip,
+ cmake
+Standards-Version: 4.5.1
+Homepage: https://github.com/ValveSoftware/Proton
+Vcs-Browser: https://github.com/ValveSoftware/Proton
+Vcs-Git: https://github.com/ValveSoftware/Proton.git
+
+Package: ros-noetic-desktop-full
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends}
+Description: ROS is a robotic tool

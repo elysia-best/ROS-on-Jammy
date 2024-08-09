@@ -1,0 +1,39 @@
+#!/usr/bin/make -f
+
+# See debhelper(7) (uncomment to enable).
+# Output every command that modifies files on the build system.
+#export DH_VERBOSE = 1
+
+
+# See FEATURE AREAS in dpkg-buildflags(1).
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# See ENVIRONMENT in dpkg-buildflags(1).
+# Package maintainers to append CFLAGS.
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+# Package maintainers to append LDFLAGS.
+#export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+DEB_BUILD_ARCH ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+%:
+	dh $@
+	
+override_dh_auto_clean:
+	rm -rf $(CURDIR)/debian/ros-noetic-desktop-full/opt/ros/noetic
+
+override_dh_auto_configure:
+	echo "No need to configure here"
+
+override_dh_auto_build:
+	echo "No need to build here"
+
+override_dh_auto_install:
+	mkdir -p $(CURDIR)/debian/ros-noetic-desktop-full/opt/ros/noetic
+	./src/catkin/bin/catkin_make_isolated --install-space $(CURDIR)/debian/ros-noetic-desktop-full/opt/ros/noetic  --install -DCMAKE_BUILD_TYPE=Release -DCATKIN_ENABLE_TESTING=OFF -DPYTHON_EXECUTABLE=/usr/bin/python3 
+
+override_dh_builddeb:
+	dh_builddeb -- -Zgzip -z9 --uniform-compression
