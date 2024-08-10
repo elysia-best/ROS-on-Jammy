@@ -219,6 +219,10 @@
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/noetic/tf2_geometry_msgs/0.7.7-1.tar.gz
     version: geometry2-release-release-noetic-tf2_geometry_msgs-0.7.7-1
 - tar:
+    local-name: geometry2/tf2_sensor_msgs
+    uri: https://github.com/ros-gbp/geometry2-release/archive/refs/tags/debian/ros-noetic-tf2-sensor-msgs_0.7.7-1_focal.tar.gz
+    version: geometry2-release-debian-ros-noetic-tf2-sensor-msgs_0.7.7-1_focal
+- tar:
     local-name: geometry2/tf2_kdl
     uri: https://github.com/ros-gbp/geometry2-release/archive/release/noetic/tf2_kdl/0.7.7-1.tar.gz
     version: geometry2-release-release-noetic-tf2_kdl-0.7.7-1
