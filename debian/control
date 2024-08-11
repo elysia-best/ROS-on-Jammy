@@ -10,7 +10,6 @@ Standards-Version: 4.5.1
 
 Package: ros-noetic-desktop-full
 Architecture: any
-Replaces: ros-noetic-desktop-full (<= 1.5.0)
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
@@ -114,5 +113,5 @@ Depends:
  qttools5-dev, 
  qttools5-dev-tools, 
  qttools5-private-dev
-
+Replaces: ros-noetic-desktop-full (<= 1.5.0)
 Description: ROS is a robotic tool
