@@ -23,7 +23,7 @@ rosdep update
 echo 'export ROSDISTRO_INDEX_URL=https://gitee.com/qinyinan/rosdistro/raw/master/index-v4.yaml' >> ~/.bashrc
 ```
 
-## Get Source Cord for ROS
+## Get Source Code for ROS
 
 In this step, you should make sure that you have a good internet connetion to Github. Source codes will be downloaded from Github.
 
@@ -40,6 +40,12 @@ vcs import --input noetic-desktop.rosinstall ./src
 ```shell
 sudo mkdir -p /opt/ros/noetic
 sudo chmod 777 /opt/ros/noetic
+```
+
+## Install build dependencies
+
+```
+rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro noetic -y
 ```
 
 ## Build and Install ROS
